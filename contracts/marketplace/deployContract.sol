@@ -4,13 +4,34 @@ import './marketLib.sol';
 
 contract DeployContract {
     
+    address private administrator;    
     MarketPlace.Data private _marketPlaceData;
     
-    function addProduct(string _name, uint8 _stock){
-        MarketPlace.addProduct(_marketPlaceData, _name, _stock);
+    constructor() public {
+        administrator = msg.sender;
     }
     
-    function getProductStock(string _name) returns (uint8){
+    modifier adminOnly(){
+        require(msg.sender == administrator);
+        _;
+    }
+    
+    function addProduct(string _name, uint8 _stock, uint256 _amount) public 
+    adminOnly() {
+        MarketPlace.addProduct(_marketPlaceData, _name, _stock, _amount);
+    }
+    
+    function removeProduct(string _name) public
+    adminOnly() returns (bool) {
+        return MarketPlace.removeProduct(_marketPlaceData, _name);
+    }
+    
+    function getProductStock(string _name) public returns (uint8){
         return MarketPlace.getProductStock(_marketPlaceData, _name);
     }
+
+    function getProductPrice(string _name) public returns(uint256) {
+        return MarketPlace.getProductAmount(_marketPlaceData, _name);
+    }
+    
 }
