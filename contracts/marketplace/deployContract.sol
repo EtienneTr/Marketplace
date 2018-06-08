@@ -34,4 +34,11 @@ contract DeployContract {
         return MarketPlace.getProductAmount(_marketPlaceData, _name);
     }
     
+    function buyProduct(string _name) payable public returns (bool) {
+        if(MarketPlace.allowedForBuy(_marketPlaceData, _name, msg.value) == true){
+            administrator.transfer(msg.value);
+            MarketPlace.buyProductConfirm(_marketPlaceData, administrator, _name, msg.sender, msg.value);
+        }
+        return true;
+    }
 }
