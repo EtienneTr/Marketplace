@@ -41,4 +41,7 @@ contract DeployContract {
         }
         return true;
     }
+
+    event Purchase(address indexed _admin, address indexed _spender, uint256 _amount, string _product);
+    event ProductCreated(string _name, uint8 _stock, uint256 _amount);
 }
